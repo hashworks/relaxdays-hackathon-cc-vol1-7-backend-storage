@@ -14,3 +14,7 @@ docker run -p 8080:8080 -it relaxdays-hackathon-vol1-backend
 ```
 
 Afterwards you can access http://127.0.0.1:8080/ which will redirect you to the swagger UI.
+
+## OpenAPI definitions
+
+OpenAPI definitions are available as [YAML](https://github.com/hashworks/relaxdays-hackathon-vol1-backend/blob/master/docs/swagger.yaml) and [JSON](https://github.com/hashworks/relaxdays-hackathon-vol1-backend/blob/master/docs/swagger.json).
