@@ -32,11 +32,15 @@ func (s Server) NewRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(CORS())
 
-	router.DELETE(BasePath+"/storage/:name", s.StorageDeleteByName)
+	router.DELETE(BasePath+"/storagePlace/:name", s.StorageDeleteByName)
 
-	router.GET(BasePath+"/storage", s.StorageGet)
+	router.GET(BasePath+"/storagePlace/:name", s.StorageGet)
 
-	router.PUT(BasePath+"/storage", s.StoragePut)
+	router.PUT(BasePath+"/storagePlace", s.StoragePut)
+
+	router.POST(BasePath+"/storagePlace", s.StoragePost)
+
+	router.GET(BasePath+"/storagesPlaces/:n/:name", s.StorageGetCursor)
 
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")

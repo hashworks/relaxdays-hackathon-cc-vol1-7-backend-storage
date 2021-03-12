@@ -22,16 +22,23 @@ info:
   title: Storage Backend Task
   version: "1.0"
 paths:
-  /storage/:
-    get:
+  /storagePlace/:
+    post:
+      parameters:
+      - description: Storage to Update
+        in: body
+        name: storage
+        required: true
+        schema:
+          $ref: '#/definitions/models.Storage'
       responses:
         "200":
-          description: OK
+          description: ""
+        "400":
+          description: Invalid storage
           schema:
-            items:
-              $ref: '#/definitions/models.Storage'
-            type: array
-      summary: Returns all storages
+            type: ""
+      summary: Update a storage
       tags:
       - Storage
     put:
@@ -49,10 +56,10 @@ paths:
           description: Invalid storage
           schema:
             type: ""
-      summary: Save or update a storage
+      summary: Save a storage
       tags:
       - Storage
-  /storage/{name}:
+  /storagePlace/{name}:
     delete:
       parameters:
       - description: Name of storage to delete
@@ -64,6 +71,48 @@ paths:
         "204":
           description: ""
       summary: Delete a storage by name
+      tags:
+      - Storage
+    get:
+      parameters:
+      - description: Name of storage to retrieve
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Storage'
+        "404":
+          description: Storage not found
+          schema:
+            type: ""
+      summary: Returns a specifc storage by name
+      tags:
+      - Storage
+  /storagesPlaces/{n}/{name}:
+    get:
+      parameters:
+      - description: Number of storages after the named one
+        in: path
+        name: "n"
+        required: true
+        type: integer
+      - description: Storage name where we should start the cursor
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Storage'
+            type: array
+      summary: Returns "n" storages lexicographically after storage "name"
       tags:
       - Storage
 swagger: "2.0"

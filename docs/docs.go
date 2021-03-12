@@ -32,29 +32,12 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/storage/": {
-            "get": {
-                "tags": [
-                    "Storage"
-                ],
-                "summary": "Returns all storages",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Storage"
-                            }
-                        }
-                    }
-                }
-            },
+        "/storagePlace/": {
             "put": {
                 "tags": [
                     "Storage"
                 ],
-                "summary": "Save or update a storage",
+                "summary": "Save a storage",
                 "parameters": [
                     {
                         "description": "Storage to save",
@@ -77,9 +60,66 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Storage"
+                ],
+                "summary": "Update a storage",
+                "parameters": [
+                    {
+                        "description": "Storage to Update",
+                        "name": "storage",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Storage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Invalid storage",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
             }
         },
-        "/storage/{name}": {
+        "/storagePlace/{name}": {
+            "get": {
+                "tags": [
+                    "Storage"
+                ],
+                "summary": "Returns a specifc storage by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of storage to retrieve",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Storage"
+                        }
+                    },
+                    "404": {
+                        "description": "Storage not found",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "Storage"
@@ -97,6 +137,41 @@ var doc = `{
                 "responses": {
                     "204": {
                         "description": ""
+                    }
+                }
+            }
+        },
+        "/storagesPlaces/{n}/{name}": {
+            "get": {
+                "tags": [
+                    "Storage"
+                ],
+                "summary": "Returns \"n\" storages lexicographically after storage \"name\"",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of storages after the named one",
+                        "name": "n",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Storage name where we should start the cursor",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Storage"
+                            }
+                        }
                     }
                 }
             }
