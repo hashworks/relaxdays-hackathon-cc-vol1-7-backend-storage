@@ -33,23 +33,6 @@ var doc = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/purchase": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Purchase"
-                ],
-                "summary": "Returns all saved purchases",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Purchase"
-                        }
-                    }
-                }
-            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -77,6 +60,59 @@ var doc = `{
                         "description": "Invalid purchase",
                         "schema": {
                             "type": ""
+                        }
+                    }
+                }
+            }
+        },
+        "/purchases": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Purchase"
+                ],
+                "summary": "Returns all saved purchases",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Purchase"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/purchasesForArticle/{articleId}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Purchase"
+                ],
+                "summary": "Returns all saved purchases for a given article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of article to query",
+                        "name": "articleId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Purchase"
+                            }
                         }
                     }
                 }

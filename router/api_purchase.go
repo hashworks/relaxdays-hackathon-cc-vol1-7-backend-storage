@@ -1,23 +1,14 @@
 package router
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hashworks/relaxdays-hackathon-vol1-backend/models"
 )
 
-// API endpoint that returns all saved purchases
-//
-// @Summary Returns all saved purchases
-// @Produce json
-// @Success 200 {object} models.Purchase
-// @Router /purchase [get]
-// @Tags Purchase
-func (s Server) PurchaseGet(c *gin.Context) {
-	purchaseRows, err := s.DotSelect.Query(s.DB, "select-purchase")
-	defer purchaseRows.Close()
-
+func (s Server) getPurchases(purchaseRows *sql.Rows, err error, c *gin.Context) {
 	if err != nil {
 		s.internalServerError(c, err.Error())
 		return
@@ -36,6 +27,35 @@ func (s Server) PurchaseGet(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, allPurchases)
+}
+
+// API endpoint that returns all saved purchases
+//
+// @Summary Returns all saved purchases
+// @Produce json
+// @Success 200 {array} models.Purchase
+// @Router /purchases [get]
+// @Tags Purchase
+func (s Server) PurchaseGet(c *gin.Context) {
+	purchaseRows, err := s.DotSelect.Query(s.DB, "select-purchase")
+	defer purchaseRows.Close()
+
+	s.getPurchases(purchaseRows, err, c)
+}
+
+// API endpoint that returns all saved purchases for a given article
+//
+// @Summary Returns all saved purchases for a given article
+// @Produce json
+// @Success 200 {array} models.Purchase
+// @Param articleId path int true "ID of article to query"
+// @Router /purchasesForArticle/{articleId} [get]
+// @Tags Purchase
+func (s Server) PurchaseGetByArticleId(c *gin.Context) {
+	purchaseRowsByArticleId, err := s.DotSelect.Query(s.DB, "select-purchase-by-articleId", c.Param("articleId"))
+	defer purchaseRowsByArticleId.Close()
+
+	s.getPurchases(purchaseRowsByArticleId, err, c)
 }
 
 // API endpoint that saves a purchase
