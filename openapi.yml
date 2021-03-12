@@ -1,0 +1,119 @@
+openapi: "3.0.2"
+info:
+  title: Backend Tasks
+  version: "1.0"
+  license:
+    name: Foo
+    url: https://example.com
+  contact:
+    name: Justin Kromlinger
+    email: justin.kromlinger@stud.htwk-leipzig.de
+servers:
+  - url: https://127.0.0.1:8080/v1
+externalDocs:
+  url: https://example.com/README.md
+
+components:
+  schemas:
+    StorageName:
+      type: string
+      example: HAL-12;2;3;1
+    ArticleID:
+      type: integer
+      format: int64
+      example: 10010020
+    Storage:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/StorageName"
+        articleID:
+          $ref: "#/components/schemas/ArticleID"
+        bestand:
+          type: integer
+          format: int64
+          example: 20
+    Purchase:
+      type: object
+      properties:
+        lieferant:
+          type: string
+          example: xyz productions ltd.
+        articleID:
+          $ref: "#/components/schemas/ArticleID"
+        menge:
+          type: integer
+          format: int64
+          example: 20
+
+paths:
+  /storage:
+    get:
+      tags:
+        - "Storage"
+      description: Returns all storages
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Storage"
+    put:
+      tags:
+        - "Storage"
+      description: Create or update a storage
+      responses:
+        "204":
+          description: OK
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/Storage"
+    delete:
+      tags:
+        - "Storage"
+      description: Delete a storage
+      responses:
+        "204":
+          description: OK
+        "404":
+          description: Storage not found
+      parameters:
+        - name: name
+          in: path
+          description: Name of storage to be deleted
+          required: true
+          schema:
+            $ref: "#/components/schemas/StorageName"
+  /purchase:
+    get:
+      tags:
+        - "Purchase"
+      description: Returns all saved purchases
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Purchase"
+    post:
+      tags:
+        - "Purchase"
+      description: Save a purchase
+      responses:
+        "204":
+          description: OK
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              $ref: "#/components/schemas/Purchase"
