@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hashworks/relaxdays-hackathon-vol1-backend/models"
+	"github.com/hashworks/relaxdays-hackathon-cc-vol1-7-backend-storage/models"
 )
 
 // @Summary Returns all storages

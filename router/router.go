@@ -32,12 +32,6 @@ func (s Server) NewRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(CORS())
 
-	router.GET(BasePath+"/purchases", s.PurchaseGet)
-
-	router.GET(BasePath+"/purchasesForArticle/:articleId", s.PurchaseGetByArticleId)
-
-	router.POST(BasePath+"/purchase", s.PurchaseSave)
-
 	router.DELETE(BasePath+"/storage/:name", s.StorageDeleteByName)
 
 	router.GET(BasePath+"/storage", s.StorageGet)

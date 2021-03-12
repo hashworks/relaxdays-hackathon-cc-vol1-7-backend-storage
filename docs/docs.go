@@ -32,92 +32,6 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/purchase": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Purchase"
-                ],
-                "summary": "Save a purchase",
-                "parameters": [
-                    {
-                        "description": "Purchase to save",
-                        "name": "purchase",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Purchase"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": ""
-                    },
-                    "400": {
-                        "description": "Invalid purchase",
-                        "schema": {
-                            "type": ""
-                        }
-                    }
-                }
-            }
-        },
-        "/purchases": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Purchase"
-                ],
-                "summary": "Returns all saved purchases",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Purchase"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/purchasesForArticle/{articleId}": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Purchase"
-                ],
-                "summary": "Returns all saved purchases for a given article",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID of article to query",
-                        "name": "articleId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Purchase"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/storage/": {
             "get": {
                 "tags": [
@@ -189,20 +103,6 @@ var doc = `{
         }
     },
     "definitions": {
-        "models.Purchase": {
-            "type": "object",
-            "properties": {
-                "articleID": {
-                    "type": "integer"
-                },
-                "lieferant": {
-                    "type": "string"
-                },
-                "menge": {
-                    "type": "integer"
-                }
-            }
-        },
         "models.Storage": {
             "type": "object",
             "properties": {
@@ -235,8 +135,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "127.0.0.1:8080",
 	BasePath:    "/api/v1",
 	Schemes:     []string{},
-	Title:       "Backend Tasks",
-	Description: "Solution for backend task of https://sites.google.com/relaxdays.de/hackathon-relaxdays/startseite",
+	Title:       "Storage Backend Task",
+	Description: "Solution for 'Lager' backend task of https://sites.google.com/relaxdays.de/hackathon-relaxdays/startseite#h.n7504a3wvsj5",
 }
 
 type s struct{}
