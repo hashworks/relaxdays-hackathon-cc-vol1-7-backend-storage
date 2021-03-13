@@ -26,6 +26,25 @@ definitions:
       standort:
         type: string
     type: object
+  models.V2Storage:
+    properties:
+      articleID:
+        type: integer
+      bestand:
+        type: integer
+      hoehe:
+        type: integer
+      kapazitaet:
+        type: integer
+      lagerabschnitt:
+        type: integer
+      platz:
+        type: integer
+      reihe:
+        type: integer
+      standort:
+        type: string
+    type: object
 host: 127.0.0.1:8080
 info:
   contact:
@@ -82,7 +101,7 @@ paths:
         schema:
           $ref: '#/definitions/models.V0Storage'
       responses:
-        "200":
+        "204":
           description: ""
         "400":
           description: Invalid storage
@@ -100,7 +119,7 @@ paths:
         schema:
           $ref: '#/definitions/models.V0Storage'
       responses:
-        "200":
+        "204":
           description: ""
         "400":
           description: Invalid storage
@@ -223,4 +242,113 @@ paths:
       summary: Returns "n" storages lexicographically after storage "name"
       tags:
       - V1Storage
+  /v2/storagePlace:
+    delete:
+      parameters:
+      - description: Name of storage to delete
+        in: query
+        name: x
+        required: true
+        type: string
+      responses:
+        "204":
+          description: ""
+      summary: Delete a storage by name
+      tags:
+      - V2Storage
+    get:
+      parameters:
+      - description: Name of storage to retrieve
+        in: query
+        name: x
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.V2Storage'
+        "404":
+          description: Storage not found
+          schema:
+            type: ""
+      summary: Returns a specifc storage by name
+      tags:
+      - V2Storage
+  /v2/storagePlace/:
+    post:
+      parameters:
+      - description: Storage to Update
+        in: body
+        name: storage
+        required: true
+        schema:
+          $ref: '#/definitions/models.V2Storage'
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Invalid storage
+          schema:
+            type: ""
+      summary: Update a storage
+      tags:
+      - V2Storage
+    put:
+      parameters:
+      - description: Storage to save
+        in: body
+        name: storage
+        required: true
+        schema:
+          $ref: '#/definitions/models.V2Storage'
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: Invalid storage
+          schema:
+            type: ""
+      summary: Save a storage
+      tags:
+      - V2Storage
+  /v2/storagePlacesForArticleID:
+    get:
+      parameters:
+      - description: Article ID
+        in: query
+        name: x
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.V2Storage'
+            type: array
+      summary: Returns all storages that contain an article
+      tags:
+      - V2Storage
+  /v2/storagesPlaces:
+    get:
+      parameters:
+      - description: Number of storages after the named one
+        in: query
+        name: "n"
+        required: true
+        type: integer
+      - description: Storage name where we should start the cursor
+        in: query
+        name: x
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.V2Storage'
+            type: array
+      summary: Returns "n" storages lexicographically after storage "name"
+      tags:
+      - V2Storage
 swagger: "2.0"

@@ -1,7 +1,6 @@
 package router
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +8,7 @@ import (
 )
 
 // API endpoint that returns a specific storage by name
+//
 // @Summary Returns a specifc storage by name
 // @Success 200 {object} models.V0Storage
 // @Failure 404 {} {} "Storage not found"
@@ -16,34 +16,19 @@ import (
 // @Router /storagePlace [get]
 // @Tags V0Storage
 func (s Server) V0StorageGet(c *gin.Context) {
-	name := c.Query("x")
-	storageRow, err := s.DotSelect.QueryRow(s.DB, "select-storage-by-name", name)
+	code, storage := s.v0SelectStorageByName(c.Query("x"))
 
-	if err != nil {
-		s.internalServerError(c, err.Error())
-		return
+	if code == http.StatusOK {
+		c.JSON(code, storage)
+	} else {
+		c.Status(code)
 	}
-
-	storage := models.V0Storage{
-		Name: name,
-	}
-
-	err = storageRow.Scan(&storage.ArticleID, &storage.Stock)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			c.Status(http.StatusNotFound)
-			return
-		}
-		s.internalServerError(c, err.Error())
-		return
-	}
-
-	c.JSON(http.StatusOK, storage)
 }
 
 // API endpoint that saves a storage
+//
 // @Summary Save a storage
-// @Success 200
+// @Success 204
 // @Failure 400 {} {} "Invalid storage"
 // @Param storage body models.V0Storage true "Storage to save"
 // @Router /storagePlace/ [put]
@@ -54,8 +39,9 @@ func (s Server) V0StoragePut(c *gin.Context) {
 }
 
 // API endpoint that updates a storage
+//
 // @Summary Update a storage
-// @Success 200
+// @Success 204
 // @Failure 400 {} {} "Invalid storage"
 // @Param storage body models.V0Storage true "Storage to Update"
 // @Router /storagePlace/ [post]
@@ -64,41 +50,30 @@ func (s Server) V0StoragePost(c *gin.Context) {
 	var storage models.V0Storage
 	c.BindJSON(&storage)
 
+	// Bei Aufrufen an legacy Endpunkte soll diese den Wert vom Feld "bestand" annehmen.
+	storage.Capacity = storage.Stock
+
 	if !storage.IsValid() {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	_, err := s.DotAlter.Exec(s.DB, "insert-or-update-storage", storage.Name, storage.ArticleID, storage.Stock)
-	if err != nil {
-		s.internalServerError(c, err.Error())
-		return
-	}
-
-	s.cacheStore.Flush()
-
-	c.Status(http.StatusOK)
+	c.Status(s.v0InsertOrUpdateStorage(storage))
 }
 
 // API endpoint that deletes a saved storage by name
+//
 // @Summary Delete a storage by name
 // @Success 204
 // @Param x query string true "Name of storage to delete"
 // @Router /storagePlace [delete]
 // @Tags V0Storage
 func (s Server) V0StorageDeleteByName(c *gin.Context) {
-	_, err := s.DotAlter.Exec(s.DB, "delete-storage", c.Query("x"))
-	if err != nil {
-		s.internalServerError(c, err.Error())
-		return
-	}
-
-	s.cacheStore.Flush()
-
-	c.Status(http.StatusNoContent)
+	c.Status(s.v0DeleteStorageByName(c.Query("x")))
 }
 
 // API endpoint returns n storages after a specific one
+//
 // @Summary Returns "n" storages lexicographically after storage "name"
 // @Success 200 {array} models.V0Storage
 // @Param n query int true "Number of storages after the named one"
@@ -106,25 +81,11 @@ func (s Server) V0StorageDeleteByName(c *gin.Context) {
 // @Router /storagesPlaces [get]
 // @Tags V0Storage
 func (s Server) V0StorageGetCursor(c *gin.Context) {
-	storageRows, err := s.DotSelect.Query(s.DB, "select-storage-by-cursor", c.Query("x"), c.Query("n"))
-	defer storageRows.Close()
+	code, storages := s.v0GetStoragesByCursor(c.Query("x"), c.Query("n"))
 
-	if err != nil {
-		s.internalServerError(c, err.Error())
-		return
+	if code == http.StatusOK {
+		c.JSON(code, storages)
+	} else {
+		c.Status(code)
 	}
-
-	allStorages := make([]models.V0Storage, 0)
-
-	for storageRows.Next() {
-		var storage models.V0Storage
-		err := storageRows.Scan(&storage.Name, &storage.ArticleID, &storage.Stock)
-		if err != nil {
-			s.internalServerError(c, err.Error())
-			return
-		}
-		allStorages = append(allStorages, storage)
-	}
-
-	c.JSON(http.StatusOK, allStorages)
 }

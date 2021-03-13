@@ -9,7 +9,8 @@ import (
 type V0Storage struct {
 	Name      string `json:"name,omitempty"`
 	ArticleID int    `json:"articleID,omitempty"`
-	Stock     int64  `json:"bestand,omitempty"`
+	Stock     int    `json:"bestand,omitempty"`
+	Capacity  int    `json:"-"`
 }
 
 func (s V0Storage) IsValid() bool {
@@ -30,6 +31,7 @@ func (s V0Storage) ToV1Storage() (bool, V1Storage) {
 			Height:    height,
 			ArticleID: s.ArticleID,
 			Stock:     s.Stock,
+			Capacity:  s.Capacity,
 		}
 	}
 }

@@ -2,7 +2,6 @@ package router
 
 import (
 	"database/sql"
-	"log"
 	"net/http"
 	"time"
 
@@ -50,6 +49,14 @@ func (s Server) NewRouter() *gin.Engine {
 	router.POST("/v1/storagePlace", s.V1StoragePost)
 	router.GET("/v1/storagesPlaces", cache.CachePage(s.cacheStore, time.Hour, s.V1StorageGetCursor))
 
+	// v2
+	router.DELETE("/v2/storagePlace", s.V2StorageDeleteByName)
+	router.GET("/v2/storagePlace", cache.CachePage(s.cacheStore, time.Hour, s.V2StorageGet))
+	router.PUT("/v2/storagePlace", s.V2StoragePut)
+	router.POST("/v2/storagePlace", s.V2StoragePost)
+	router.GET("/v2/storagesPlaces", cache.CachePage(s.cacheStore, time.Hour, s.V2StorageGetCursor))
+	router.GET("/v2/storagePlacesForArticleID", cache.CachePage(s.cacheStore, time.Hour, s.V2StorageGetPlacesForArticleID))
+
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
 	})
@@ -57,9 +64,4 @@ func (s Server) NewRouter() *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, openapiURL))
 
 	return router
-}
-
-func (s Server) internalServerError(c *gin.Context, err string) {
-	log.Print(err)
-	c.Status(http.StatusInternalServerError)
 }
