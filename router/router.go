@@ -2,7 +2,9 @@ package router
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gchaincl/dotsql"
@@ -28,10 +30,26 @@ func CORS() gin.HandlerFunc {
 	}
 }
 
+func logOldAPIRequest() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		url := c.Request.URL.String()
+		if !strings.HasPrefix(url, "/v2/") {
+			fmt.Printf("%s %s %s %s X-Forwarded-For=%s\n",
+				c.ClientIP(),
+				time.Now().Format("02/Jun/2006:15:04:05"),
+				c.Request.Method,
+				url,
+				c.Request.Header.Get("X-Forwarded-For"),
+			)
+		}
+	}
+}
+
 // NewRouter returns a new router.
 func (s Server) NewRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(CORS())
+	router.Use(logOldAPIRequest())
 
 	s.cacheStore = persistence.NewInMemoryStore(time.Second)
 
