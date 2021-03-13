@@ -14,8 +14,6 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-const BasePath = "/api/v1"
-
 type Server struct {
 	DotAlter   *dotsql.DotSql
 	DotSelect  *dotsql.DotSql
@@ -38,15 +36,15 @@ func (s Server) NewRouter() *gin.Engine {
 
 	s.cacheStore = persistence.NewInMemoryStore(time.Second)
 
-	router.DELETE(BasePath+"/storagePlace/:name", s.StorageDeleteByName)
+	router.DELETE("/storagePlace/:name", s.StorageDeleteByName)
 
-	router.GET(BasePath+"/storagePlace/:name", cache.CachePage(s.cacheStore, time.Hour, s.StorageGet))
+	router.GET("/storagePlace/:name", cache.CachePage(s.cacheStore, time.Hour, s.StorageGet))
 
-	router.PUT(BasePath+"/storagePlace", s.StoragePut)
+	router.PUT("/storagePlace", s.StoragePut)
 
-	router.POST(BasePath+"/storagePlace", s.StoragePost)
+	router.POST("/storagePlace", s.StoragePost)
 
-	router.GET(BasePath+"/storagesPlaces/:n/:name", cache.CachePage(s.cacheStore, time.Hour, s.StorageGetCursor))
+	router.GET("/storagesPlaces/:n/:name", cache.CachePage(s.cacheStore, time.Hour, s.StorageGetCursor))
 
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")

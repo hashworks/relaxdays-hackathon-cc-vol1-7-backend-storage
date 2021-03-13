@@ -208,7 +208,7 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "127.0.0.1:8080",
-	BasePath:    "/api/v1",
+	BasePath:    "/",
 	Schemes:     []string{},
 	Title:       "Storage Backend Task",
 	Description: "Solution for 'Lager' backend task of https://sites.google.com/relaxdays.de/hackathon-relaxdays/startseite#h.n7504a3wvsj5",
