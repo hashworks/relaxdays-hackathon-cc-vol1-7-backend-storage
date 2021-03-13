@@ -7,7 +7,7 @@ type StorageName = string
 type Storage struct {
 	Name StorageName `json:"name,omitempty"`
 
-	ArticleID ArticleID `json:"articleID,omitempty"`
+	ArticleID int `json:"articleID,omitempty"`
 
 	Stock int64 `json:"bestand,omitempty"`
 }
