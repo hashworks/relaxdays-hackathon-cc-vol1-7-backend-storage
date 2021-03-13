@@ -4,8 +4,11 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gchaincl/dotsql"
+	"github.com/gin-contrib/cache"
+	"github.com/gin-contrib/cache/persistence"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -14,10 +17,11 @@ import (
 const BasePath = "/api/v1"
 
 type Server struct {
-	DotAlter  *dotsql.DotSql
-	DotSelect *dotsql.DotSql
-	DB        *sql.DB
-	router    *gin.Engine
+	DotAlter   *dotsql.DotSql
+	DotSelect  *dotsql.DotSql
+	DB         *sql.DB
+	router     *gin.Engine
+	cacheStore *persistence.InMemoryStore
 }
 
 func CORS() gin.HandlerFunc {
@@ -32,15 +36,17 @@ func (s Server) NewRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(CORS())
 
+	s.cacheStore = persistence.NewInMemoryStore(time.Second)
+
 	router.DELETE(BasePath+"/storagePlace/:name", s.StorageDeleteByName)
 
-	router.GET(BasePath+"/storagePlace/:name", s.StorageGet)
+	router.GET(BasePath+"/storagePlace/:name", cache.CachePage(s.cacheStore, time.Hour, s.StorageGet))
 
 	router.PUT(BasePath+"/storagePlace", s.StoragePut)
 
 	router.POST(BasePath+"/storagePlace", s.StoragePost)
 
-	router.GET(BasePath+"/storagesPlaces/:n/:name", s.StorageGetCursor)
+	router.GET(BasePath+"/storagesPlaces/:n/:name", cache.CachePage(s.cacheStore, time.Hour, s.StorageGetCursor))
 
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
