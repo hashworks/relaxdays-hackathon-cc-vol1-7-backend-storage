@@ -12,11 +12,11 @@ import (
 // @Summary Returns a specifc storage by name
 // @Success 200 {object} models.Storage
 // @Failure 404 {} {} "Storage not found"
-// @Param name path string true "Name of storage to retrieve"
-// @Router /storagePlace/{name} [get]
+// @Param x query string true "Name of storage to retrieve"
+// @Router /storagePlace [get]
 // @Tags Storage
 func (s Server) StorageGet(c *gin.Context) {
-	name := c.Param("name")
+	name := c.Query("x")
 	storageRow, err := s.DotSelect.QueryRow(s.DB, "select-storage-by-name", name)
 
 	if err != nil {
@@ -83,11 +83,11 @@ func (s Server) StoragePost(c *gin.Context) {
 // API endpoint that deletes a saved storage by name
 // @Summary Delete a storage by name
 // @Success 204
-// @Param name path string true "Name of storage to delete"
-// @Router /storagePlace/{name} [delete]
+// @Param x query string true "Name of storage to delete"
+// @Router /storagePlace [delete]
 // @Tags Storage
 func (s Server) StorageDeleteByName(c *gin.Context) {
-	_, err := s.DotAlter.Exec(s.DB, "delete-storage", c.Param("name"))
+	_, err := s.DotAlter.Exec(s.DB, "delete-storage", c.Query("x"))
 	if err != nil {
 		s.internalServerError(c, err.Error())
 		return
@@ -101,12 +101,12 @@ func (s Server) StorageDeleteByName(c *gin.Context) {
 // API endpoint returns n storages after a specific one
 // @Summary Returns "n" storages lexicographically after storage "name"
 // @Success 200 {array} models.Storage
-// @Param n path int true "Number of storages after the named one"
-// @Param name path string true "Storage name where we should start the cursor"
-// @Router /storagesPlaces/{n}/{name} [get]
+// @Param n query int true "Number of storages after the named one"
+// @Param x query string true "Storage name where we should start the cursor"
+// @Router /storagesPlaces [get]
 // @Tags Storage
 func (s Server) StorageGetCursor(c *gin.Context) {
-	storageRows, err := s.DotSelect.Query(s.DB, "select-storage-by-cursor", c.Param("name"), c.Param("n"))
+	storageRows, err := s.DotSelect.Query(s.DB, "select-storage-by-cursor", c.Query("x"), c.Query("n"))
 	defer storageRows.Close()
 
 	if err != nil {

@@ -36,15 +36,15 @@ func (s Server) NewRouter() *gin.Engine {
 
 	s.cacheStore = persistence.NewInMemoryStore(time.Second)
 
-	router.DELETE("/storagePlace/:name", s.StorageDeleteByName)
+	router.DELETE("/storagePlace", s.StorageDeleteByName)
 
-	router.GET("/storagePlace/:name", cache.CachePage(s.cacheStore, time.Hour, s.StorageGet))
+	router.GET("/storagePlace", cache.CachePage(s.cacheStore, time.Hour, s.StorageGet))
 
 	router.PUT("/storagePlace", s.StoragePut)
 
 	router.POST("/storagePlace", s.StoragePost)
 
-	router.GET("/storagesPlaces/:n/:name", cache.CachePage(s.cacheStore, time.Hour, s.StorageGetCursor))
+	router.GET("/storagesPlaces", cache.CachePage(s.cacheStore, time.Hour, s.StorageGetCursor))
 
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")

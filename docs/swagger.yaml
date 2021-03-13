@@ -22,6 +22,39 @@ info:
   title: Storage Backend Task
   version: "1.0"
 paths:
+  /storagePlace:
+    delete:
+      parameters:
+      - description: Name of storage to delete
+        in: query
+        name: x
+        required: true
+        type: string
+      responses:
+        "204":
+          description: ""
+      summary: Delete a storage by name
+      tags:
+      - Storage
+    get:
+      parameters:
+      - description: Name of storage to retrieve
+        in: query
+        name: x
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Storage'
+        "404":
+          description: Storage not found
+          schema:
+            type: ""
+      summary: Returns a specifc storage by name
+      tags:
+      - Storage
   /storagePlace/:
     post:
       parameters:
@@ -59,50 +92,17 @@ paths:
       summary: Save a storage
       tags:
       - Storage
-  /storagePlace/{name}:
-    delete:
-      parameters:
-      - description: Name of storage to delete
-        in: path
-        name: name
-        required: true
-        type: string
-      responses:
-        "204":
-          description: ""
-      summary: Delete a storage by name
-      tags:
-      - Storage
-    get:
-      parameters:
-      - description: Name of storage to retrieve
-        in: path
-        name: name
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Storage'
-        "404":
-          description: Storage not found
-          schema:
-            type: ""
-      summary: Returns a specifc storage by name
-      tags:
-      - Storage
-  /storagesPlaces/{n}/{name}:
+  /storagesPlaces:
     get:
       parameters:
       - description: Number of storages after the named one
-        in: path
+        in: query
         name: "n"
         required: true
         type: integer
       - description: Storage name where we should start the cursor
-        in: path
-        name: name
+        in: query
+        name: x
         required: true
         type: string
       responses:

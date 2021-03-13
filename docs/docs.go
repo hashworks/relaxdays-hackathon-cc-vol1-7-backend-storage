@@ -32,6 +32,57 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/storagePlace": {
+            "get": {
+                "tags": [
+                    "Storage"
+                ],
+                "summary": "Returns a specifc storage by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of storage to retrieve",
+                        "name": "x",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Storage"
+                        }
+                    },
+                    "404": {
+                        "description": "Storage not found",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Storage"
+                ],
+                "summary": "Delete a storage by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of storage to delete",
+                        "name": "x",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/storagePlace/": {
             "put": {
                 "tags": [
@@ -90,58 +141,7 @@ var doc = `{
                 }
             }
         },
-        "/storagePlace/{name}": {
-            "get": {
-                "tags": [
-                    "Storage"
-                ],
-                "summary": "Returns a specifc storage by name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Name of storage to retrieve",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Storage"
-                        }
-                    },
-                    "404": {
-                        "description": "Storage not found",
-                        "schema": {
-                            "type": ""
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Storage"
-                ],
-                "summary": "Delete a storage by name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Name of storage to delete",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/storagesPlaces/{n}/{name}": {
+        "/storagesPlaces": {
             "get": {
                 "tags": [
                     "Storage"
@@ -152,14 +152,14 @@ var doc = `{
                         "type": "integer",
                         "description": "Number of storages after the named one",
                         "name": "n",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Storage name where we should start the cursor",
-                        "name": "name",
-                        "in": "path",
+                        "name": "x",
+                        "in": "query",
                         "required": true
                     }
                 ],
