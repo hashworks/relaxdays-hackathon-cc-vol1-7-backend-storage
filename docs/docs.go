@@ -35,7 +35,7 @@ var doc = `{
         "/storagePlace": {
             "get": {
                 "tags": [
-                    "Storage"
+                    "V0Storage"
                 ],
                 "summary": "Returns a specifc storage by name",
                 "parameters": [
@@ -51,7 +51,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Storage"
+                            "$ref": "#/definitions/models.V0Storage"
                         }
                     },
                     "404": {
@@ -64,7 +64,7 @@ var doc = `{
             },
             "delete": {
                 "tags": [
-                    "Storage"
+                    "V0Storage"
                 ],
                 "summary": "Delete a storage by name",
                 "parameters": [
@@ -86,7 +86,7 @@ var doc = `{
         "/storagePlace/": {
             "put": {
                 "tags": [
-                    "Storage"
+                    "V0Storage"
                 ],
                 "summary": "Save a storage",
                 "parameters": [
@@ -96,7 +96,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Storage"
+                            "$ref": "#/definitions/models.V0Storage"
                         }
                     }
                 ],
@@ -114,7 +114,7 @@ var doc = `{
             },
             "post": {
                 "tags": [
-                    "Storage"
+                    "V0Storage"
                 ],
                 "summary": "Update a storage",
                 "parameters": [
@@ -124,7 +124,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Storage"
+                            "$ref": "#/definitions/models.V0Storage"
                         }
                     }
                 ],
@@ -144,7 +144,7 @@ var doc = `{
         "/storagesPlaces": {
             "get": {
                 "tags": [
-                    "Storage"
+                    "V0Storage"
                 ],
                 "summary": "Returns \"n\" storages lexicographically after storage \"name\"",
                 "parameters": [
@@ -159,8 +159,7 @@ var doc = `{
                         "type": "string",
                         "description": "Storage name where we should start the cursor",
                         "name": "x",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -169,7 +168,150 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Storage"
+                                "$ref": "#/definitions/models.V0Storage"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/storagePlace": {
+            "get": {
+                "tags": [
+                    "V1Storage"
+                ],
+                "summary": "Returns a specifc storage by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of storage to retrieve",
+                        "name": "x",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.V1Storage"
+                        }
+                    },
+                    "404": {
+                        "description": "Storage not found",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "V1Storage"
+                ],
+                "summary": "Delete a storage by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of storage to delete",
+                        "name": "x",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/v1/storagePlace/": {
+            "put": {
+                "tags": [
+                    "V1Storage"
+                ],
+                "summary": "Save a storage",
+                "parameters": [
+                    {
+                        "description": "Storage to save",
+                        "name": "storage",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.V1Storage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Invalid storage",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "V1Storage"
+                ],
+                "summary": "Update a storage",
+                "parameters": [
+                    {
+                        "description": "Storage to Update",
+                        "name": "storage",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.V1Storage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Invalid storage",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/storagesPlaces": {
+            "get": {
+                "tags": [
+                    "V1Storage"
+                ],
+                "summary": "Returns \"n\" storages lexicographically after storage \"name\"",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of storages after the named one",
+                        "name": "n",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Storage name where we should start the cursor",
+                        "name": "x",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.V1Storage"
                             }
                         }
                     }
@@ -178,7 +320,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "models.Storage": {
+        "models.V0Storage": {
             "type": "object",
             "properties": {
                 "articleID": {
@@ -188,6 +330,32 @@ var doc = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.V1Storage": {
+            "type": "object",
+            "properties": {
+                "articleID": {
+                    "type": "integer"
+                },
+                "bestand": {
+                    "type": "integer"
+                },
+                "hoehe": {
+                    "type": "integer"
+                },
+                "lagerabschnitt": {
+                    "type": "integer"
+                },
+                "platz": {
+                    "type": "integer"
+                },
+                "reihe": {
+                    "type": "integer"
+                },
+                "standort": {
                     "type": "string"
                 }
             }
