@@ -10,7 +10,7 @@ import (
 func (s Server) v3GetStoragesByCursorAndPlace(l string, x string, n string) (int, []models.V0Storage) {
 	allStorages := make([]models.V0Storage, 0)
 
-	storageRows, err := s.DotSelect.Query(s.DB, "select-storage-by-cursor", l, x, n)
+	storageRows, err := s.DotSelect.Query(s.DB, "select-storage-by-cursor-and-place", l, x, n)
 	defer storageRows.Close()
 
 	if err != nil {
