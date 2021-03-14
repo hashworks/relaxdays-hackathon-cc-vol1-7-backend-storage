@@ -86,6 +86,7 @@ func (s Server) NewRouter() *gin.Engine {
 	authorizedV3.POST("/storagePlace", s.V3StoragePost)
 	authorizedV3.GET("/storagesPlaces", cache.CachePage(s.cacheStore, time.Hour, s.V3StorageGetCursor))
 	authorizedV3.GET("/storagePlacesForArticleID", cache.CachePage(s.cacheStore, time.Hour, s.V3StorageGetPlacesForArticleID))
+	authorizedV3.GET("/storagePlacesAtLocation", cache.CachePage(s.cacheStore, time.Hour, s.V3StorageGetPlacesAtLocationCursor))
 
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")

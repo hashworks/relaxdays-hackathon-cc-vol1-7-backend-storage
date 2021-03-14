@@ -617,6 +617,52 @@ var doc = `{
                 }
             }
         },
+        "/v3/storagePlacesAtLocation": {
+            "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "tags": [
+                    "V3Storage"
+                ],
+                "summary": "Returns \"n\" storages lexicographically after storage \"x\" at place \"l\"",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of storages after the named one",
+                        "name": "n",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Place to query",
+                        "name": "l",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Storage name where we should start the cursor",
+                        "name": "x",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.V2Storage"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v3/storagePlacesForArticleID": {
             "get": {
                 "security": [

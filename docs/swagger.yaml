@@ -429,6 +429,35 @@ paths:
       summary: Save a storage
       tags:
       - V3Storage
+  /v3/storagePlacesAtLocation:
+    get:
+      parameters:
+      - description: Number of storages after the named one
+        in: query
+        name: "n"
+        required: true
+        type: integer
+      - description: Place to query
+        in: query
+        name: l
+        required: true
+        type: string
+      - description: Storage name where we should start the cursor
+        in: query
+        name: x
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.V2Storage'
+            type: array
+      security:
+      - BasicAuth: []
+      summary: Returns "n" storages lexicographically after storage "x" at place "l"
+      tags:
+      - V3Storage
   /v3/storagePlacesForArticleID:
     get:
       parameters:
