@@ -34,6 +34,8 @@ var sqlSelect string
 // @license.name GNU Affero General Public License v3
 // @license.url https://gnu.org/licenses/agpl.html
 
+// @securityDefinitions.basic
+
 // @host 127.0.0.1:8080
 // @BasePath /
 func main() {

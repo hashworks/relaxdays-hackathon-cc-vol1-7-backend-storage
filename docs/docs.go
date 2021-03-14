@@ -487,6 +487,206 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/v3/storagePlace": {
+            "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "tags": [
+                    "V3Storage"
+                ],
+                "summary": "Returns a specifc storage by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of storage to retrieve",
+                        "name": "x",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.V2Storage"
+                        }
+                    },
+                    "404": {
+                        "description": "Storage not found",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "tags": [
+                    "V3Storage"
+                ],
+                "summary": "Delete a storage by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of storage to delete",
+                        "name": "x",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/v3/storagePlace/": {
+            "put": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "tags": [
+                    "V3Storage"
+                ],
+                "summary": "Save a storage",
+                "parameters": [
+                    {
+                        "description": "Storage to save",
+                        "name": "storage",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.V2Storage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Invalid storage",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "tags": [
+                    "V3Storage"
+                ],
+                "summary": "Update a storage",
+                "parameters": [
+                    {
+                        "description": "Storage to Update",
+                        "name": "storage",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.V2Storage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Invalid storage",
+                        "schema": {
+                            "type": ""
+                        }
+                    }
+                }
+            }
+        },
+        "/v3/storagePlacesForArticleID": {
+            "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "tags": [
+                    "V3Storage"
+                ],
+                "summary": "Returns all storages that contain an article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Article ID",
+                        "name": "x",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.V2Storage"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v3/storagesPlaces": {
+            "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "tags": [
+                    "V3Storage"
+                ],
+                "summary": "Returns \"n\" storages lexicographically after storage \"name\"",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Number of storages after the named one",
+                        "name": "n",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Storage name where we should start the cursor",
+                        "name": "x",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.V2Storage"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -558,6 +758,11 @@ var doc = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "": {
+            "type": "basic"
         }
     }
 }`
