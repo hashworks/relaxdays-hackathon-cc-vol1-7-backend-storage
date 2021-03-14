@@ -34,7 +34,7 @@ func logOldAPIRequest() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		url := c.Request.URL.String()
 		if !strings.HasPrefix(url, "/v2/") {
-			fmt.Printf("%s %s %s %s X-Forwarded-For=%s\n",
+			fmt.Printf("DeprecatedCall@CC-VOL7: %s %s %s %s X-Forwarded-For=%s\n",
 				c.ClientIP(),
 				time.Now().Format("02/Jun/2006:15:04:05"),
 				c.Request.Method,
